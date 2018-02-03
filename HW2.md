@@ -14,23 +14,29 @@ ngs_site <- read.table('~/iowa state/semester 4/BCB568/hw2/ngs_site_data.Rtxt', 
 We create a fucntion in R that depenst of P and ngs_site data 
 
 ```{r}
-log.likelihood<- function(x, ngs_site){ 
-  sum_total=0
-  for (i in 1:length(ngs_site$i)){
-    sum_site=0
-    if (ngs_site$a[i]==1)
-   {
-      sum_site = (10**(-ngs_site$q[i]/10))/3 *(x**2) + (1/2*(1-10**(-ngs_site$q[i]/10))+ 1/2* ((10**(-ngs_site$q[i]/10))/3))* (2*x*(1-x))+ (1-10**(-ngs_site$q[i]/10))*(1-x)**2
-   
-   }
-    else
-   {
-     sum_site =  (1-10**(-ngs_site$q[i]/10))*(x**2) + (1/2*(1-10**(-ngs_site$q[i]/10))+ 1/2* ((10**(-ngs_site$q[i]/10))/3))* (2*x*(1-x))+ (10**(-ngs_site$q[i]/10))/3 *(1-x)**2
-   
-   }
-    sum_total= sum_total + log(sum_site)
+for (ind in 1:max(ngs_site$i)){
+    sum_products_ind=0
+    prod_0=1
+    prod_1=1
+    prod_2=1
+    for (read in 1:length(ngs_site$i[ngs_site$i==ind]))
+      {
+      if (ngs_site$a[(ind-1)*length(ngs_site$i[ngs_site$i==ind-1])+read]==1)
+        {
+        prod_0 = prod_0 * (10**(-ngs_site$q[i]/10))/3*(1-x)**2
+        prod_1 = prod_1 * (1/2*(1-10**(-ngs_site$q[i]/10))+ 1/2* ((10**(-ngs_site$q[i]/10))/3))* (2*x*(1-x))
+        prod_2= prod_2* (1-10**(-ngs_site$q[i]/10))*(x)**2
+        }
+      else
+        {
+          prod_0 = prod_0 * (1-10**(-ngs_site$q[i]/10))*(x-1)**2
+          prod_1= prod_1 * (1/2*(1-10**(-ngs_site$q[i]/10))+ 1/2* ((10**(-ngs_site$q[i]/10))/3))* (2*x*(1-x))
+          prod_2= prod_2 * (10**(-ngs_site$q[i]/10))/3 *(x)**2
+          }
+          
+    
   }
-return(sum_total)
+
 }
 ```
 
