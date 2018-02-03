@@ -33,8 +33,11 @@ for (ind in 1:max(ngs_site$i)){
           prod_1= prod_1 * (1/2*(1-10**(-ngs_site$q[i]/10))+ 1/2* ((10**(-ngs_site$q[i]/10))/3))* (2*x*(1-x))
           prod_2= prod_2 * (10**(-ngs_site$q[i]/10))/3 *(x)**2
           }
-          
-    
+      install.packages("matrixStats")
+      library("matrixStats")
+      colProds(name_of_matrix)
+      S <- sum(colProds(name_of_matrix))
+      log <- log10(S)
   }
 
 }
