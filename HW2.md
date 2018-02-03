@@ -14,7 +14,8 @@ ngs_site <- read.table('~/iowa state/semester 4/BCB568/hw2/ngs_site_data.Rtxt', 
 We create a fucntion in R that depenst of P and ngs_site data 
 
 ```{r}
-for (ind in 1:max(ngs_site$i)){
+log.likelihood_1<- function(x, ngs_site){ 
+  for (ind in 1:max(ngs_site$i)){
     sum_products_ind=0
     prod_0=1
     prod_1=1
@@ -32,11 +33,11 @@ for (ind in 1:max(ngs_site$i)){
           prod_0 = prod_0 * (1-10**(-ngs_site$q[i]/10))*(x-1)**2
           prod_1= prod_1 * (1/2*(1-10**(-ngs_site$q[i]/10))+ 1/2* ((10**(-ngs_site$q[i]/10))/3))* (2*x*(1-x))
           prod_2= prod_2 * (10**(-ngs_site$q[i]/10))/3 *(x)**2
-          }
-          
-    
+        }
+      }
+    sum_products_ind= sum_products_ind + log(prod_0+prod_1+prod_2)
   }
-
+return(sum_products_ind)
 }
 ```
 
