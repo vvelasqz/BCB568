@@ -7,22 +7,25 @@ output: html_document
 
 
 ```{r}
-setwd("~/iowa state/semester 4/BCB568/hw2")
-ngs_site <- read.table('~/iowa state/semester 4/BCB568/hw2/ngs_site_data.Rtxt', header = TRUE)
+#setwd("~/iowa state/semester 4/BCB568/hw2")
+ngs_site <- read.table('ngs_site_data.Rtxt', header = TRUE)
 ```
+
 
 We create a fucntion in R that depenst of P and ngs_site data 
 
 ```{r}
 log.likelihood<- function(x, ngs_site){ 
+  read_index=0
+  sum_products_ind=0
   for (ind in 1:max(ngs_site$i)){
-    sum_products_ind=0
+    
     prod_0=1
     prod_1=1
     prod_2=1
     for (read in 1:length(ngs_site$i[ngs_site$i==ind]))
       {
-      read_index=(ind-1)*length(ngs_site$i[ngs_site$i==ind-1])+read
+      read_index= read_index +1 
       if (ngs_site$a[read_index]==1){
         prod_0 = prod_0 * (10**(-ngs_site$q[read_index]/10))/3*(1-x)**2
         prod_1 = prod_1 * (1/2*(1-10**(-ngs_site$q[read_index]/10))+ 1/2* ((10**(-ngs_site$q[read_index]/10))/3))* (2*x*(1-x))
@@ -32,9 +35,7 @@ log.likelihood<- function(x, ngs_site){
         prod_0 = prod_0 * (1-10**(-ngs_site$q[read_index]/10))*(x-1)**2
         prod_1= prod_1 * (1/2*(1-10**(-ngs_site$q[read_index]/10))+ 1/2* ((10**(-ngs_site$q[read_index]/10))/3))* (2*x*(1-x))
         prod_2= prod_2 * (10**(-ngs_site$q[read_index]/10))/3 *(x)**2
-        
       }
-      
       }
     sum_products_ind= sum_products_ind + log(prod_0+prod_1+prod_2)
   }
@@ -63,6 +64,14 @@ likelihood_vector = integer(101)
 plot(P, likelihood_vector, xlab="Psi", ylab="Log.Likelihood", main="Log likelhood function")
 
 ```
+
+
+Now we optimize
+
+```{r}
+optim(0, lower = 0, upper = 1, log.likelihood, ngs_site=ngs_site, method = 'Brent', control=list(fnscale=-1))
+```
+
 
 
 
